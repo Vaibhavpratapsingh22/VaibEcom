@@ -6,12 +6,12 @@ import Image from "next/image";
 
 export default function Login() {
   return (
-    <div className="flex md:h-screen justify-center items-center w-full">
+    <div className="flex md:h-screen flex-col justify-center items-center w-full">
       <Image 
           src="https://images.unsplash.com/photo-1432821596592-e2c18b78144f"
           alt="Login Image"
           objectFit="cover"
-          width={1080}
+          width={720}
           height={720}
           />
       {/* <div className="flex items-center justify-center w-full md:w-1/2">
@@ -22,7 +22,7 @@ export default function Login() {
           height={600}
         />
       </div> */}
-      <div className="flex flex-col items-center justify-center w-full md:w-1/4 py-2">
+      <div className="flex flex-col items-center justify-center w-full mt-20">
         <div className="w-full max-w-md space-y-8">
           <div>
             <h1 className="text-2xl font-bold">
