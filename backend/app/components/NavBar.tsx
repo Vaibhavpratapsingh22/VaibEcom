@@ -6,8 +6,8 @@ type NavBarProps = {
 }
 const NavBar = ({image}:NavBarProps) => {
   return (
-    <div className="px-5 flex justify-end w-full borrder">
-        <Image onClick={()=> signOut()} src={image} alt="Profile Image" width={40} height={40} style={{borderRadius:"50%"}} />
+    <div className="px-5 py-2">
+        <Image src={image} alt="Profile Image" width={50} height={50} style={{borderRadius:"50%"}} />
     </div>
   )
 }

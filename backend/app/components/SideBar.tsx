@@ -8,6 +8,7 @@ type SideBarProps = {
 const SideBar = ({ name }: SideBarProps) => {
   return (
     <div className="flex flex-col w-full h-full bg-red-200 p-5">
+
       <div>
         Welcome,
         <br />
@@ -17,6 +18,7 @@ const SideBar = ({ name }: SideBarProps) => {
         </span>
       </div>
       {SideMenu.map((item, index) => (
+
         <Link href={item.link}>
           <div className="flex flex-row px-1 py-4">
             <span className="px-1">
@@ -24,6 +26,7 @@ const SideBar = ({ name }: SideBarProps) => {
             </span>
             {item.title}
           </div>
+
         </Link>
       ))}
     </div>
