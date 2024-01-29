@@ -1,9 +1,11 @@
 "use client";
 import axios from "axios";
-import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-const NewProduct = () => {
+import { useParams, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
+const EditProduct = () => {
+  const { id } = useParams();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -16,7 +18,7 @@ const NewProduct = () => {
     e.preventDefault();
     const data = { name, price, description };
     try {
-      const response = await axios.post("/api/product", data);
+      const response = await axios.put("/api/product", data);
       console.log(response);
       if (response.status === 201) {
         toast.success("Product saved successfully !");
@@ -32,6 +34,23 @@ const NewProduct = () => {
       }
     }
   };
+  const fetchProduct = async () => {
+    if (id) {
+      try {
+        const response = await axios.get(`/api/product/?id=${id}`);
+        if (response.status === 200) {
+          setName(response.data.name);
+          setPrice(response.data.price);
+          setDescription(response.data.description);
+        }
+      } catch (error) {
+        toast.error("Error in fetching product details !");
+      }
+    }
+  };
+  useEffect(() => {
+    fetchProduct();
+  }, []);
   return (
     <>
       <h2>Add new product </h2>
@@ -46,9 +65,10 @@ const NewProduct = () => {
             id="ProductName"
             name="Product Name"
             value={name}
+            disabled
             required
             onChange={(e) => setName(e.target.value)}
-            className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
+            className="mt-1 w-full px-5 h-10 border-black-400 border-2 bg-gray-200 text-sm text-black shadow-sm"
           />
         </div>
 
@@ -94,4 +114,4 @@ const NewProduct = () => {
   );
 };
 
-export default NewProduct;
+export default EditProduct;
