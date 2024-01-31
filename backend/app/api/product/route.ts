@@ -80,24 +80,53 @@ export async function GET(req: any) {
       );
     }
   } else {
-    const result = await prismadb.products.findMany();
-    return NextResponse.json(result, { status: 200 });
+    try {
+      const result = await prismadb.products.findMany();
+      return NextResponse.json(result, { status: 200 });
+    } catch (error) {
+      console.error(error);
+      return NextResponse.json(
+        { error: "Error fetching product" },
+        { status: 500 }
+      );
+    }
   }
 }
 
 export async function PUT(req: Request) {
   const body = await req.json();
-  const { name, description, price } = body;
-  const result = await prismadb.products.updateMany({
-    where: {
-      name,
-    },
-    data: {
-      description,
-      price: Number(price),
-    },
-  });
-  return NextResponse.json(result, { status: 200 });
+  const { name, description, price, images, newImages } = body;
+  if (!newImages?.length) {
+    const result = await prismadb.products.updateMany({
+      where: {
+        name,
+      },
+      data: {
+        description,
+        price: Number(price),
+        image: images,
+      },
+    });
+    return NextResponse.json(result, { status: 200 });
+  } else {
+    const imagesURL = await Promise.all(
+      newImages.map(async (imageURLs: string) => {
+        const result = await cloudinary.uploader.upload(imageURLs);
+        return result.secure_url;
+      })
+    );
+    const result = await prismadb.products.updateMany({
+      where: {
+        name,
+      },
+      data: {
+        description,
+        price: Number(price),
+        image: [...images, ...imagesURL],
+      },
+    });
+    return NextResponse.json(result, { status: 200 });
+  }
 }
 
 export async function DELETE(req: Request) {

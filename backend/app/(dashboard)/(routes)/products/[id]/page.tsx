@@ -9,6 +9,8 @@ const EditProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [productImages, setProductImages] = useState<String[]>([]);
+  const [newImages, setNewImages] = useState<String[]>([]);
   const clearForm = () => {
     setName("");
     setPrice("");
@@ -16,7 +18,13 @@ const EditProduct = () => {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = { name, price, description };
+    const data = {
+      name,
+      price,
+      description,
+      images: productImages,
+      newImages: newImages,
+    };
     try {
       const response = await axios.put("/api/product", data);
       console.log(response);
@@ -42,6 +50,7 @@ const EditProduct = () => {
           setName(response.data.name);
           setPrice(response.data.price);
           setDescription(response.data.description);
+          setProductImages(response.data.image);
         }
       } catch (error) {
         toast.error("Error in fetching product details !");
@@ -51,6 +60,26 @@ const EditProduct = () => {
   useEffect(() => {
     fetchProduct();
   }, []);
+  const handleUpload = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    const files: FileList | null = ev.target.files;
+    if (files && files?.length > 0) {
+      const imagesArray: string[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+        const currentFile = files[i];
+        reader.onloadend = () => {
+          imagesArray.push(reader.result as string);
+        };
+        reader.readAsDataURL(currentFile);
+      }
+      setNewImages(imagesArray);
+    }
+  };
+  const handleImageDelete = (index: number) => {
+    const newArray = productImages.filter((url, i) => i !== index);
+    setProductImages(newArray);
+  };
   return (
     <>
       <h2>Add new product </h2>
@@ -88,6 +117,32 @@ const EditProduct = () => {
           />
         </div>
 
+        {productImages?.map((image: any, index: number) => (
+          <div className="flex mx-2 w-full h-auto ">
+            <img src={image} alt="product image" height={400} width={400} />
+            <span
+              className="w-2 text-[14px] ml-2 mt-[-5px] cursor-pointer"
+              onClick={() => handleImageDelete(index)}
+            >
+              X
+            </span>
+          </div>
+        ))}
+
+        <div className="col-span-6">
+          <label className="block text-sm font-medium text-gray-700">
+            Upload Image
+          </label>
+
+          <input
+            type="file"
+            multiple
+            onChange={(ev) => handleUpload(ev)}
+            id="ProductImage"
+            name="Product Image"
+            className="mt-1 w-full p-1 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
+          />
+        </div>
         <div className="col-span-6">
           <label className="block text-sm font-medium text-gray-700">
             Description
