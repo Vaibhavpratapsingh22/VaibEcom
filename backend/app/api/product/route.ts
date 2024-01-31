@@ -1,6 +1,7 @@
 import prismadb from "@/app/lib/prismadb";
 import { NextRequest, NextResponse } from "next/server";
-
+import { v2 as cloudinary } from "cloudinary";
+import { NextApiRequest } from "next";
 type createProps = {
   data: {
     name: string;
@@ -9,26 +10,47 @@ type createProps = {
   };
   method: string;
 };
+cloudinary.config({
+  cloud_name: "dr5cycgqc",
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET_KEY,
+});
 
-export async function POST(req: Request) {
-  const body = await req.json();
-  const { name, description, price } = body;
-  const existingProduct = await prismadb.products.findFirst({
-    where: {
-      name,
-    },
-  });
-  if (existingProduct) {
-    return new NextResponse("Product already exists", { status: 400 });
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+
+    const { name, description, price, image } = body;
+    const imagesURL = await Promise.all(
+      image.map(async (imageURLs: string) => {
+        const result = await cloudinary.uploader.upload(imageURLs);
+        return result.secure_url;
+      })
+    );
+    const existingProduct = await prismadb.products.findFirst({
+      where: {
+        name,
+      },
+    });
+    if (existingProduct) {
+      return new NextResponse("Product already exists", { status: 400 });
+    }
+    const result = await prismadb.products.create({
+      data: {
+        name,
+        description: description,
+        price: Number(price),
+        image: imagesURL,
+      },
+    });
+    return NextResponse.json(result, { status: 201 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Error creating product" },
+      { status: 500 }
+    );
   }
-  const result = await prismadb.products.create({
-    data: {
-      name,
-      description: description,
-      price: Number(price),
-    },
-  });
-  return NextResponse.json(result, { status: 201 });
 }
 
 export async function GET(req: any) {
@@ -79,11 +101,11 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  const body = await req.json();
-  const { name } = body;
-  const result = await prismadb.products.deleteMany({
+  const url = new URL(req.url);
+  const name = url.searchParams.get("name")?.toString();
+  const result = await prismadb.products.delete({
     where: {
-      name,
+      name: name,
     },
   });
   return NextResponse.json(result, { status: 200 });

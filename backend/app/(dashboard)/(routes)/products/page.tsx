@@ -1,5 +1,5 @@
 "use client";
-import Modal from "@/app/components/Modal";
+import Modal from "@/app/components/DeleteModal";
 import axios from "axios";
 import { Delete, Edit } from "lucide-react";
 import Link from "next/link";
@@ -11,8 +11,8 @@ import { toast } from "react-toastify";
 const Products = () => {
   const router = useRouter();
   const [products, setProducts] = useState([]);
-  const [deleteProduct, setDeleteProduct] = useState("");
   const [modal, setModal] = useState<boolean>(false);
+  const [deleteProduct, setDeleteProduct] = useState<string | number>("");
   const getProducts = async () => {
     try {
       const response = await axios.get("/api/product");
@@ -35,20 +35,22 @@ const Products = () => {
 
       case "delete":
         setModal(true);
-        setDeleteProduct(product?.name);
-        // try {
-        //   const response = await axios.delete(`/api/product/?id=${product.id}`);
-        //   if (response.status === 200) {
-        //     toast.success("Product deleted successfully !");
-        //     getProducts();
-        //   }
-        // } catch (error) {
-        //   toast.error("Error in deleting product !");
-        // }
+        setDeleteProduct(product.name);
         break;
     }
   };
-  const handleModal = () => {
+  const closeModal = async (name: string) => {
+    if (name === "delete") {
+      try {
+        const response = await axios.delete(`/api/product/?name=${deleteProduct}`);
+        if (response.status === 200) {
+          toast.success("Product deleted successfully !");
+          getProducts();
+        }
+      } catch (error) {
+        toast.error("Error in deleting product !");
+      }
+    }
     setModal(!modal);
   };
   return (
@@ -109,6 +111,7 @@ const Products = () => {
           </tbody>
         </table>
       </div>
+      {modal && <Modal closeModal={closeModal} />}
     </div>
   );
 };

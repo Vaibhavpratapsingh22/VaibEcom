@@ -7,14 +7,17 @@ const NewProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState<String[]>([]);
   const clearForm = () => {
     setName("");
     setPrice("");
     setDescription("");
+    setImage([]);
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = { name, price, description };
+    const data = { name, price, description, image };
+    console.log(data);
     try {
       const response = await axios.post("/api/product", data);
       console.log(response);
@@ -30,6 +33,23 @@ const NewProduct = () => {
       } else {
         toast.error("Error in saving product !");
       }
+    }
+  };
+  const handleUpload = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    const files: FileList | null = ev.target.files;
+    console.log(files, files?.length);
+    if (files && files?.length > 0) {
+      const imagesArray: string[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+        const currentFile = files[i];
+        reader.onloadend = () => {
+          imagesArray.push(reader.result as string);
+        };
+        reader.readAsDataURL(currentFile);
+      }
+      setImage(imagesArray);
     }
   };
   return (
@@ -65,6 +85,20 @@ const NewProduct = () => {
             onChange={(e) => setPrice(e.target.value)}
             name="Product Price"
             className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
+          />
+        </div>
+
+        <div className="col-span-6">
+          <label className="block text-sm font-medium text-gray-700">
+            Upload Image
+          </label>
+
+          <input
+            type="file"
+            multiple
+            onChange={(ev) => handleUpload(ev)}
+            id="ProductImage"
+            name="Product Image"
           />
         </div>
 
