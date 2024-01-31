@@ -21,11 +21,6 @@ const SideBar = ({ name }: SideBarProps) => {
         </span>
       </div>
       {SideMenu.map((item, index) => {
-        console.log(
-          pathname?.includes(item?.title.toLocaleLowerCase()),
-          item?.title.toLocaleLowerCase(),
-          pathname
-        );
         return (
           <Link href={item.link}>
             <div

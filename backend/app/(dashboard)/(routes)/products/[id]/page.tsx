@@ -27,7 +27,6 @@ const EditProduct = () => {
     };
     try {
       const response = await axios.put("/api/product", data);
-      console.log(response);
       if (response.status === 201) {
         toast.success("Product saved successfully !");
         clearForm();
