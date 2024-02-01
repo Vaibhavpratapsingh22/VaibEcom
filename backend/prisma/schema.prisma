@@ -22,9 +22,11 @@ model Products {
 }
 
 model Category {
-    id        String   @id @default(auto()) @map("_id") @db.ObjectId
-    name      String   @unique
-    parent    String? @db.ObjectId
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id        String    @id @default(auto()) @map("_id") @db.ObjectId
+    name      String?   @unique
+    parentId  String?   @unique @db.ObjectId
+    parent    Category? @relation("parentCheck", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    children  Category? @relation("parentCheck")
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
 }

@@ -30,7 +30,11 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
-    const response = await prismadb.category.findMany();
+    const response = await prismadb.category.findMany({
+     include:{
+        parent:true
+     }
+    });
     if (response) return NextResponse.json(response, { status: 200 });
   } catch (err) {
     return new NextResponse("Error while fetching categories", { status: 400 });
