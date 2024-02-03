@@ -1,7 +1,7 @@
 "use client";
 import ParentCategory from "@/app/components/ParentCategory";
 import axios from "axios";
-import { Delete, Edit } from "lucide-react";
+import { Delete, Dot, Edit, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import ReactSelect from "react-select";
 import { toast } from "react-toastify";
@@ -19,24 +19,46 @@ const Categories = () => {
     label: "Select Parent Category",
   });
   const [parentCategoryData, setParentCategoryData] = useState([]);
-  const handleSaveParentCategory = async (name: string) => {
-    const data = {
-      parentName: name,
-      saveParentCategory: true,
-    };
-    try {
-      const response = await axios.post("/api/category", data);
-      if (response.status === 201) {
-        toast.success("Parent Category saved successfully !");
-        getAllParentCategories();
-      } else {
-        toast.error(response.data.message);
+  const handleSaveParentCategory = async (name: string, type?: string) => {
+    if (type === "edit") {
+      const data = {
+        parentName: name,
+        updateParentCategory: true,
+      };
+      try {
+        const response = await axios.put("/api/category", data);
+        if (response.status === 200) {
+          toast.success("Parent Category updated successfully !");
+          getAllParentCategories();
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error: any) {
+        if (error.response.status === 400) {
+          toast.error("Error while creating category!");
+        } else {
+          toast.error("Error in saving category !");
+        }
       }
-    } catch (error: any) {
-      if (error.response.status === 400) {
-        toast.error("Error while creating category!");
-      } else {
-        toast.error("Error in saving category !");
+    } else {
+      const data = {
+        parentName: name,
+        saveParentCategory: true,
+      };
+      try {
+        const response = await axios.post("/api/category", data);
+        if (response.status === 201) {
+          toast.success("Parent Category saved successfully !");
+          getAllParentCategories();
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error: any) {
+        if (error.response.status === 400) {
+          toast.error("Error while creating category!");
+        } else {
+          toast.error("Error in saving category !");
+        }
       }
     }
   };
@@ -99,15 +121,36 @@ const Categories = () => {
     getAllParentCategories();
   }, []);
 
+  const handleEditDelete = async (action: string, data: any) => {
+    if (action === "edit") {
+      setCategoryName(data.name);
+      setParentCategory({
+        value: data.parent?.id,
+        label: data.parent?.name,
+      });
+    } else {
+      try {
+        const response = await axios.delete(`/api/category/${data.id}`);
+        if (response.status === 200) {
+          toast.success("Category deleted successfully !");
+          getAllCategories();
+        }
+      } catch (error) {
+        toast.error("Error in deleting category !");
+      }
+    }
+  };
+
   return (
     <>
-      <h2>Create New Category </h2>
+      <h1 className="flex justify-center text-2xl mb-10"> Manage Categories</h1>
+      <h2 className="mb-3 text-xl">Create New Category </h2>
       <div className="flex">
         <input
           type="text"
           id="Category Name"
           name="Category Name"
-          placeholder="Please enter category name"
+          placeholder="Category Name"
           required
           value={categoryName}
           onChange={(e) => setCategoryName(e.target.value)}
@@ -146,31 +189,37 @@ const Categories = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 text-center">
-            {categories?.map((product: any) => (
-              <tr key={product.id}>
-                <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                  {product.name.toUpperCase()}
-                </td>
-                <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                  {product.parent?.name.toUpperCase() || "N/A"}
-                </td>
-                <td className="whitespace-nowrap px-4 py-2 flex text-gray-700">
-                  <button
-                    className="flex text-black font-bold mx-1 rounded"
-                    // onClick={() => handleEditDelete("edit", product)}
-                  >
-                    <Edit /> Edit
-                  </button>
+            {categories?.length > 0 ? (
+              categories?.map((product: any) => (
+                <tr key={product.id}>
+                  <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                    {product.name.toUpperCase()}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                    {product.parent?.name.toUpperCase() || "N/A"}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-2 justify-center flex text-gray-700">
+                    <button
+                      className="flex text-black font-bold mx-1 rounded"
+                      onClick={() => handleEditDelete("edit", product)}
+                    >
+                      <Edit />
+                    </button>
 
-                  <button
-                    className=" text-black flex justify-center items-center font-bold rounded"
-                    // onClick={() => handleEditDelete("delete", product)}
-                  >
-                    <Delete /> Delete
-                  </button>
-                </td>
+                    <button
+                      className=" text-black flex justify-center items-center font-bold rounded"
+                      onClick={() => handleEditDelete("delete", product)}
+                    >
+                      <Trash2 />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={3}> No Data Found</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

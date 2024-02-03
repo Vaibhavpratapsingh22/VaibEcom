@@ -3,9 +3,20 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { parentName, categoryName, parentCategoryId, saveCategory, saveParentCategory } =
-    body;
-    console.log(parentName, categoryName, parentCategoryId, saveCategory, saveParentCategory)
+  const {
+    parentName,
+    categoryName,
+    parentCategoryId: { value: parentCategoryId },
+    saveCategory,
+    saveParentCategory,
+  } = body;
+  console.log(
+    parentName,
+    categoryName,
+    parentCategoryId,
+    saveCategory,
+    saveParentCategory
+  );
   if (saveCategory) {
     try {
       if (parentCategoryId?.length > 0) {
@@ -60,13 +71,71 @@ export async function GET(req: NextRequest) {
     }
     if (id === "category") {
       const response = await prismadb.category.findMany({
-        include:{
-          parent:true
-        }
+        include: {
+          parent: true,
+        },
       });
       if (response) return NextResponse.json(response, { status: 200 });
     }
   } catch (err) {
-    return new NextResponse(`Error while fetching categories ${err}`, { status: 400 });
+    return new NextResponse(`Error while fetching categories ${err}`, {
+      status: 400,
+    });
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  const body = await req.json();
+  const {
+    parentName,
+    categoryName,
+    parentCategoryId,
+    updateParentCategory,
+    updateCategory,
+  } = body;
+  console.log(
+    parentName,
+    categoryName,
+    parentCategoryId,
+    updateParentCategory,
+    updateCategory
+  );
+  if (updateCategory) {
+    try {
+      const response = await prismadb.category.update({
+        where: {
+          name: categoryName,
+        },
+        data: {
+          name: categoryName,
+          parentId: parentCategoryId,
+        },
+      });
+      if (response)
+        return new NextResponse("Category updated", { status: 200 });
+    } catch (err) {
+      return new NextResponse(`Error while updating category, ${err}`, {
+        status: 400,
+      });
+    }
+  }
+
+  if (updateParentCategory) {
+    try {
+      const response = await prismadb.parentCategory.updateMany({
+        where: {
+          name: parentName,
+        },
+        data: {
+          name: parentName,
+        },
+      });
+      if (response)
+        return new NextResponse("Category updated", { status: 200 });
+    } catch (err) {
+      return new NextResponse(`Error while updating category, ${err}`, {
+        status: 400,
+      });
+    }
   }
 }
