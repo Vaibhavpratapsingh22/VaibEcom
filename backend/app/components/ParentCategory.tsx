@@ -5,32 +5,53 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 type TParentCategory = {
-  onSave: (name: string, type?: string) => void;
+  onSave: (
+    parentName?: string,
+    editProduct?: { name: string; id: string },
+    type?: string
+  ) => void;
   data: string[];
+  fetchParentCategories: () => void;
 };
 
-const ParentCategory = ({ onSave, data }: TParentCategory) => {
+const ParentCategory = ({
+  onSave,
+  data,
+  fetchParentCategories,
+}: TParentCategory) => {
   const [parentCategoryName, setParentCategoryName] = useState("");
+  const [editStatus, setEditStatus] = useState(false);
+  const [editProduct, setEditProduct] = useState({} as any);
   const [parenCategories, setParentCategories] = useState<string[]>([]);
   useEffect(() => {
-    if (data.length > 0) {
+    if (data) {
       setParentCategories(data);
     }
   }, [data]);
-  const handleEditDelete = async (action: string, data: any) => {
-    if (action === "edit") {
-      setParentCategoryName(data.name);
-    } else {
-      try {
-        const response = await axios.delete(`/api/category/?name=parent&${data.id}`);
-        if (response.status === 200) {
-          toast.success("Category deleted successfully !");
-        }
-      } catch (error) {
-        toast.error("Error in deleting category !");
+  const handleDelete = async (data: any) => {
+    try {
+      const response = await axios.delete(
+        `/api/category?name=parent&id=${data.id}`
+      );
+      if (response.status === 200) {
+        toast.success("Category deleted successfully !");
+        fetchParentCategories();
       }
+    } catch (error) {
+      toast.error("Error in deleting category !");
     }
   };
+  const handleSaveCategory = (name: string) => {
+    if (editStatus) {
+      onSave(parentCategoryName, editProduct, "edit");
+      setEditStatus(false);
+      setEditProduct({} as any);
+    } else {
+      onSave(parentCategoryName);
+    }
+    setParentCategoryName("");
+  };
+
   return (
     <>
       <h2 className="mb-3 mt-20 text-xl">Create New Parent Category </h2>
@@ -48,9 +69,7 @@ const ParentCategory = ({ onSave, data }: TParentCategory) => {
 
         <button
           className="bg-blue-500 hover:bg-blue-700 ml-2 text-white font-bold py-2 px-4 rounded"
-          onClick={() => {
-            onSave(parentCategoryName, "edit"), setParentCategoryName("");
-          }}
+          onClick={() => handleSaveCategory(parentCategoryName)}
         >
           Save
         </button>
@@ -79,14 +98,18 @@ const ParentCategory = ({ onSave, data }: TParentCategory) => {
                   <td className="whitespace-nowrap px-4 py-2 justify-center flex text-gray-700">
                     <button
                       className="flex text-black font-bold mx-1 rounded"
-                      onClick={() => setParentCategoryName(product.name)}
+                      onClick={() => {
+                        setEditStatus(true),
+                          setEditProduct(product),
+                          setParentCategoryName(product.name);
+                      }}
                     >
                       <Edit />
                     </button>
 
                     <button
                       className=" text-black flex justify-center items-center font-bold rounded"
-                      // onClick={() => handleEditDelete("delete", product)}
+                      onClick={() => handleDelete(product)}
                     >
                       <Trash2 />
                     </button>
@@ -95,7 +118,10 @@ const ParentCategory = ({ onSave, data }: TParentCategory) => {
               ))
             ) : (
               <tr>
-                <td colSpan={3}> No Data Found</td>
+                <td colSpan={3} className="text-center">
+                  {" "}
+                  No Data Found
+                </td>
               </tr>
             )}
           </tbody>

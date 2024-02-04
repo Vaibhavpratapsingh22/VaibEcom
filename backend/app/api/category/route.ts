@@ -6,24 +6,17 @@ export async function POST(req: NextRequest) {
   const {
     parentName,
     categoryName,
-    parentCategoryId: { value: parentCategoryId },
+    parentCategoryId,
     saveCategory,
     saveParentCategory,
   } = body;
-  console.log(
-    parentName,
-    categoryName,
-    parentCategoryId,
-    saveCategory,
-    saveParentCategory
-  );
   if (saveCategory) {
     try {
-      if (parentCategoryId?.length > 0) {
+      if (parentCategoryId?.value?.length > 0) {
         const response = await prismadb.category.create({
           data: {
             name: categoryName,
-            parentId: parentCategoryId,
+            parentId: parentCategoryId.value,
           },
         });
         if (response)
@@ -93,13 +86,6 @@ export async function PUT(req: NextRequest) {
     updateParentCategory,
     updateCategory,
   } = body;
-  console.log(
-    parentName,
-    categoryName,
-    parentCategoryId,
-    updateParentCategory,
-    updateCategory
-  );
   if (updateCategory) {
     try {
       const response = await prismadb.category.update({
@@ -124,7 +110,7 @@ export async function PUT(req: NextRequest) {
     try {
       const response = await prismadb.parentCategory.updateMany({
         where: {
-          name: parentName,
+          id: parentCategoryId,
         },
         data: {
           name: parentName,
@@ -134,6 +120,42 @@ export async function PUT(req: NextRequest) {
         return new NextResponse("Category updated", { status: 200 });
     } catch (err) {
       return new NextResponse(`Error while updating category, ${err}`, {
+        status: 400,
+      });
+    }
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const url = new URL(req.url);
+  const name = url.searchParams.get("name")?.toString();
+  const id = url.searchParams.get("id")?.toString();
+  if (name === "category") {
+    try {
+      const response = await prismadb.category.delete({
+        where: {
+          id: id,
+        },
+      });
+      if (response)
+        return new NextResponse("Category deleted", { status: 200 });
+    } catch (err) {
+      return new NextResponse(`Error while deleting category, ${err}`, {
+        status: 400,
+      });
+    }
+  }
+  if (name === "parent") {
+    try {
+      const response = await prismadb.parentCategory.delete({
+        where: {
+          id: id,
+        },
+      });
+      if (response)
+        return new NextResponse("Parent category deleted", { status: 200 });
+    } catch (err) {
+      return new NextResponse(`Error while deleting parent category, ${err}`, {
         status: 400,
       });
     }

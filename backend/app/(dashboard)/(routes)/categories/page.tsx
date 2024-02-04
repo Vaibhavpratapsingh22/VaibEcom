@@ -19,10 +19,16 @@ const Categories = () => {
     label: "Select Parent Category",
   });
   const [parentCategoryData, setParentCategoryData] = useState([]);
-  const handleSaveParentCategory = async (name: string, type?: string) => {
+  const handleSaveParentCategory = async (
+    parentName?: string,
+    editProduct?: { id: string; name: string },
+    type?: string,
+  ) => {
     if (type === "edit") {
+      const {id, name}:any = editProduct;
       const data = {
-        parentName: name,
+        parentName: parentName,
+        parentCategoryId: id,
         updateParentCategory: true,
       };
       try {
@@ -42,7 +48,7 @@ const Categories = () => {
       }
     } else {
       const data = {
-        parentName: name,
+        parentName,
         saveParentCategory: true,
       };
       try {
@@ -109,7 +115,6 @@ const Categories = () => {
     try {
       const response = await axios.get("/api/category?get=category");
       if (response.status === 200) {
-        console.log(response);
         setCategories(response.data);
       }
     } catch (error) {
@@ -226,6 +231,7 @@ const Categories = () => {
       <ParentCategory
         onSave={handleSaveParentCategory}
         data={parentCategoryData}
+        fetchParentCategories={getAllParentCategories}
       />
     </>
   );
