@@ -19,13 +19,16 @@ const Categories = () => {
     label: "Select Parent Category",
   });
   const [parentCategoryData, setParentCategoryData] = useState([]);
+  const [edit, setEdit] = useState(false);
+  const [editProduct, setEditProduct] = useState({} as any);
+
   const handleSaveParentCategory = async (
     parentName?: string,
     editProduct?: { id: string; name: string },
-    type?: string,
+    type?: string
   ) => {
     if (type === "edit") {
-      const {id, name}:any = editProduct;
+      const { id, name }: any = editProduct;
       const data = {
         parentName: parentName,
         parentCategoryId: id,
@@ -86,7 +89,7 @@ const Categories = () => {
       parentCategoryId: parentCategory,
       saveCategory: true,
     };
-    if (parentCategory.value !== 0) {
+    if (parentCategory && !edit) {
       try {
         const response = await axios.post("/api/category", data);
         if (response.status === 201) {
@@ -107,8 +110,38 @@ const Categories = () => {
           toast.error("Error in saving category !");
         }
       }
-    } else {
-      toast.error("Please select parent category !");
+      if (!parentCategory) {
+        toast.error("Please select parent category");
+      }
+    }
+    if (edit) {
+      const data = {
+        categoryName,
+        categoryId: editProduct.id,
+        parentCategoryId: parentCategory.value,
+        updateCategory: true,
+      };
+      try {
+        const response = await axios.put("/api/category", data);
+        if (response.status === 200) {
+          toast.success("Category updated successfully !");
+          setCategoryName("");
+          setParentCategory({
+            value: 0,
+            label: "Please Slect Parent Category",
+          });
+          getAllCategories();
+          setEdit(false);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error: any) {
+        if (error.response.status === 400) {
+          toast.error("Error while creating category!");
+        } else {
+          toast.error("Error in saving category !");
+        }
+      }
     }
   };
   const getAllCategories = async () => {
@@ -133,9 +166,13 @@ const Categories = () => {
         value: data.parent?.id,
         label: data.parent?.name,
       });
+      setEdit(true);
+      setEditProduct(data);
     } else {
       try {
-        const response = await axios.delete(`/api/category/${data.id}`);
+        const response = await axios.delete(
+          `/api/category/?name=category&id=${data.id}`
+        );
         if (response.status === 200) {
           toast.success("Category deleted successfully !");
           getAllCategories();
@@ -145,7 +182,6 @@ const Categories = () => {
       }
     }
   };
-
   return (
     <>
       <h1 className="flex justify-center text-2xl mb-10"> Manage Categories</h1>

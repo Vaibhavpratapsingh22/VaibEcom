@@ -84,13 +84,14 @@ export async function PUT(req: NextRequest) {
     categoryName,
     parentCategoryId,
     updateParentCategory,
+    categoryId,
     updateCategory,
   } = body;
   if (updateCategory) {
     try {
       const response = await prismadb.category.update({
         where: {
-          name: categoryName,
+          id: categoryId,
         },
         data: {
           name: categoryName,
