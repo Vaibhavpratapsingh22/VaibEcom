@@ -93,6 +93,49 @@ const NewProduct = () => {
         </div>
 
         <div className="col-span-6">
+          Properties
+          <div className="mt-1 grid grid-cols-12 gap-6">
+            <div className="col-span-4 sm:col-span-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Property Name
+              </label>
+              <input
+                type="text"
+                id="Color"
+                name="Color"
+                className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
+              />
+            </div>
+
+            <div className="col-span-4 sm:col-span-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Value
+              </label>
+              <input
+                type="text"
+                id="Size"
+                name="Size"
+                className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
+              />
+            </div>
+            <div className="col-span-4 sm:col-span-4">
+              <button
+                type="button"
+                className=" mt-5 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+          <button
+            type="button"
+            className=" mt-10 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
+          >
+            Add new property+
+          </button>
+        </div>
+
+        <div className="col-span-6">
           <label className="block text-sm font-medium text-gray-700">
             Upload Image
           </label>
@@ -122,12 +165,14 @@ const NewProduct = () => {
             className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
           />
         </div>
-        <button
-          type="submit"
-          className=" mt-10 inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
-        >
-          Save Details
-        </button>
+        <div className="col-span-2">
+          <button
+            type="submit"
+            className=" mt-10 w-full inline-block shrink-0 rounded-md border px-2 border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
+          >
+            Save Details
+          </button>
+        </div>
       </form>
     </>
   );
