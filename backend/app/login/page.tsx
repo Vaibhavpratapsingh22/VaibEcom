@@ -1,10 +1,14 @@
 "use client";
 import { signIn, useSession } from "next-auth/react";
 import React from "react";
-
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 export default function Login() {
+  const { data: session } = useSession();
+  if (session) {
+    return redirect("/dashboard");
+  }
   return (
     <>
       <section className="bg-white">

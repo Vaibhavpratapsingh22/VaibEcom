@@ -2,6 +2,7 @@
 import React, { ReactNode } from "react";
 import DashboardLayout from "./DashboardLayout";
 import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 type LayoutProps = {
   children: ReactNode;
 };
@@ -17,7 +18,7 @@ const Layout = ({ children }: LayoutProps) => {
       </DashboardLayout>
     );
   }
-  return <></>;
+  return redirect("/login");
 };
 
 export default Layout;
