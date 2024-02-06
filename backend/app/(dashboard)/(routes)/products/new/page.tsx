@@ -10,6 +10,7 @@ const NewProduct = () => {
   const [description, setDescription] = useState("");
   const [uploadedImages, setUploadedImage] = useState<String[]>([]);
   const [inputList, setInputList] = useState([{ property: "", value: "" }]);
+  const [saveProperties, setSaveProperties] = useState(false);
   const clearForm = () => {
     setName("");
     setPrice("");
@@ -40,6 +41,7 @@ const NewProduct = () => {
     setInputList([...inputList, { property: "", value: "" }]);
   };
   const handleRemoveClick = (index: any) => {
+    setSaveProperties(false);
     const list = [...inputList];
     list.splice(index, 1);
     setInputList(list);
@@ -110,63 +112,67 @@ const NewProduct = () => {
           />
         </div>
 
-        <div className="col-span-6">
+        <div className="col-span-6 ">
           Properties
-          {inputList.map((x, i) => {
-            return (
-              <>
-                <div className="mt-1 grid grid-cols-12 gap-6">
-                  <div className="col-span-4 sm:col-span-4">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Property Name
-                    </label>
-                    <input
-                      type="text"
-                      id="Color"
-                      name="property"
-                      onChange={(e) => handleInputChange(e, i)}
-                      className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
-                    />
-                  </div>
+          <div className="mt-2 border-pink-800 border-2 p-2 grid grid-cols-12 gap-6">
+            {inputList.length ? (
+              inputList.map((x, i) => {
+                return (
+                  <>
+                    <div className="col-span-4 sm:col-span-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Property Name
+                      </label>
+                      <input
+                        type="text"
+                        id="Color"
+                        name="property"
+                        onChange={(e) => handleInputChange(e, i)}
+                        className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
+                      />
+                    </div>
 
-                  <div className="col-span-4 sm:col-span-4">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Value
-                    </label>
-                    <input
-                      type="text"
-                      id="Size"
-                      name="value"
-                      onChange={(e) => handleInputChange(e, i)}
-                      className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
-                    />
-                  </div>
-                  <div className="col-span-4 sm:col-span-4">
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveClick(i)}
-                      className=" mt-5 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              </>
-            );
-          })}
+                    <div className="col-span-4 sm:col-span-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Value
+                      </label>
+                      <input
+                        type="text"
+                        id="Size"
+                        name="value"
+                        onChange={(e) => handleInputChange(e, i)}
+                        className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
+                      />
+                    </div>
+                    <div className="col-span-4 sm:col-span-4">
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveClick(i)}
+                        className=" mt-5 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </>
+                );
+              })
+            ) : (
+              <div className="col-span-12 text-center">No properties added</div>
+            )}
+          </div>
         </div>
-        <div className="col-span-10">
+        <div className="col-span-6">
           <button
             type="button"
             onClick={() => handleAddClick()}
-            className=" mt-5 mx-2 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
+            className=" mt-2 mx-2 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
           >
             Add New Property
           </button>
           <button
             type="button"
-            onClick={() => handleAddClick()}
-            className=" mt-5 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
+            onClick={() => setSaveProperties(true)}
+            className=" mt-2 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
           >
             Save All
           </button>
@@ -201,6 +207,42 @@ const NewProduct = () => {
             className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
           />
         </div>
+        {saveProperties && (
+          <div className="col-span-6 overflow-x-auto rounded-lg border border-gray-200 mt-10">
+            <table className="min-w-full max-h-72 overflow-auto divide-y-2 divide-gray-200 bg-white text-sm">
+              <thead className="text-center">
+                <tr>
+                  <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                    Property Name
+                  </th>
+                  <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                    Value
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 text-center">
+                {inputList?.length > 0 ? (
+                  inputList?.map((product: any, index: number) => (
+                    <tr key={index}>
+                      <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                        {product.property.toUpperCase()}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                        {product.value.toUpperCase()}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={2} className="text-center">
+                      No properties added
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
         <div className="col-span-2">
           <button
             type="submit"
