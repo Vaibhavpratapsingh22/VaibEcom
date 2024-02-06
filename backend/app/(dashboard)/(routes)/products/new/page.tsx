@@ -9,6 +9,7 @@ const NewProduct = () => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [uploadedImages, setUploadedImage] = useState<String[]>([]);
+  const [inputList, setInputList] = useState([{ property: "", value: "" }]);
   const clearForm = () => {
     setName("");
     setPrice("");
@@ -18,7 +19,6 @@ const NewProduct = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = { name, price, description, uploadedImages };
-
     try {
       const response = await axios.post("/api/product", data);
       if (response.status === 201) {
@@ -36,6 +36,23 @@ const NewProduct = () => {
       }
     }
   };
+  const handleAddClick = () => {
+    setInputList([...inputList, { property: "", value: "" }]);
+  };
+  const handleRemoveClick = (index: any) => {
+    const list = [...inputList];
+    list.splice(index, 1);
+    setInputList(list);
+  };
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const { name, value } = e.target;
+    const list = [...inputList];
+    list[index] = { ...list[index], [name]: value };
+    setInputList(list);
+  };
   const handleUpload = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const files: FileList | null = ev.target.files;
     if (files && files?.length > 0) {
@@ -52,6 +69,7 @@ const NewProduct = () => {
       setUploadedImage(imagesArray);
     }
   };
+  console.log(inputList);
   return (
     <>
       <h2>Add new product </h2>
@@ -94,47 +112,65 @@ const NewProduct = () => {
 
         <div className="col-span-6">
           Properties
-          <div className="mt-1 grid grid-cols-12 gap-6">
-            <div className="col-span-4 sm:col-span-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Property Name
-              </label>
-              <input
-                type="text"
-                id="Color"
-                name="Color"
-                className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
-              />
-            </div>
+          {inputList.map((x, i) => {
+            return (
+              <>
+                <div className="mt-1 grid grid-cols-12 gap-6">
+                  <div className="col-span-4 sm:col-span-4">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Property Name
+                    </label>
+                    <input
+                      type="text"
+                      id="Color"
+                      name="property"
+                      onChange={(e) => handleInputChange(e, i)}
+                      className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
+                    />
+                  </div>
 
-            <div className="col-span-4 sm:col-span-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Value
-              </label>
-              <input
-                type="text"
-                id="Size"
-                name="Size"
-                className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
-              />
-            </div>
-            <div className="col-span-4 sm:col-span-4">
-              <button
-                type="button"
-                className=" mt-5 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
-              >
-                Add
-              </button>
-            </div>
-          </div>
+                  <div className="col-span-4 sm:col-span-4">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Value
+                    </label>
+                    <input
+                      type="text"
+                      id="Size"
+                      name="value"
+                      onChange={(e) => handleInputChange(e, i)}
+                      className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
+                    />
+                  </div>
+                  <div className="col-span-4 sm:col-span-4">
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveClick(i)}
+                      className=" mt-5 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              </>
+            );
+          })}
+        </div>
+        <div className="col-span-10">
           <button
             type="button"
-            className=" mt-10 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
+            onClick={() => handleAddClick()}
+            className=" mt-5 mx-2 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
           >
-            Add new property+
+            Add New Property
+          </button>
+          <button
+            type="button"
+            onClick={() => handleAddClick()}
+            className=" mt-5 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
+          >
+            Save All
           </button>
         </div>
-
         <div className="col-span-6">
           <label className="block text-sm font-medium text-gray-700">
             Upload Image
