@@ -20,9 +20,9 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const { name, description, price, image, inputList } = body;
+    const { name, description, price, uploadedImages, inputList } = body;
     const imagesURL = await Promise.all(
-      image.map(async (imageURLs: string) => {
+      uploadedImages?.map(async (imageURLs: string) => {
         const result = await cloudinary.uploader.upload(imageURLs);
         return result.secure_url;
       })
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     if (existingProduct) {
       return new NextResponse("Product already exists", { status: 400 });
     }
-    const result = await prismadb.products.create({
+    const result = await prismadb.products.createMany({
       data: {
         name,
         description: description,
