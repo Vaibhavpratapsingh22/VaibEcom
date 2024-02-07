@@ -244,7 +244,7 @@ const EditProduct = () => {
         </div>
         <button
           type="submit"
-          className=" mt-10 inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
+          className=" mt-10 inline-block shrink-0 rounded-md border mb-4 bg-[#B91C1C] py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
         >
           Save Details
         </button>

@@ -19,7 +19,7 @@ const DashboardLayout = ({
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center sm:justify-end">
         <button
           data-drawer-target="default-sidebar"
           data-drawer-toggle="default-sidebar"

@@ -167,14 +167,14 @@ const NewProduct = () => {
           <button
             type="button"
             onClick={() => handleAddClick()}
-            className=" mt-2 mx-2 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
+            className=" mt-2 mx-2 inline-block shrink-0 px-2 rounded-md border bg-[#B91C1C] py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
           >
             Add New Property
           </button>
           <button
             type="button"
             onClick={() => setSaveProperties(true)}
-            className=" mt-2 inline-block shrink-0 px-2 rounded-md border border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
+            className=" mt-2 inline-block shrink-0 px-2 rounded-md border bg-[#B91C1C] py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
           >
             Save All
           </button>
@@ -248,7 +248,7 @@ const NewProduct = () => {
         <div className="col-span-2">
           <button
             type="submit"
-            className=" mt-10 w-full inline-block shrink-0 rounded-md border px-2 border-blue-600 bg-blue-600 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
+            className=" mt-10 w-full inline-block shrink-0 rounded-md border px-2 bg-[#B91C1C] py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 cursor-pointer"
           >
             Save Details
           </button>

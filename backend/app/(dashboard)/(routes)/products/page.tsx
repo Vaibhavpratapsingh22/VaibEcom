@@ -58,7 +58,7 @@ const Products = () => {
       <div className="flex justify-between">
         <h1 className="text-2xl">Product Listing</h1>
         <Link href="/products/new">
-          <button className="bg-purple-600 flex justify-end text-white font-bold py-2 px-4 rounded mb-4">
+          <button className="bg-[#B91C1C] flex justify-end text-white font-bold py-2 px-4 rounded mb-4">
             + Add Product
           </button>
         </Link>

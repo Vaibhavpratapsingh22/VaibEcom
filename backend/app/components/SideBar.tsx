@@ -11,7 +11,7 @@ const SideBar = ({ name }: SideBarProps) => {
     "flex flex-row px-1 py-4 bg-black text-white font-bold rounded-md shadow-md hover:bg-gray";
   const pathname = usePathname();
   return (
-    <div className="flex flex-col w-full h-full bg-red-200 p-5">
+    <div className="flex flex-col w-full h-full bg-[#B91C1C] p-5">
       <div className="my-4">
         Welcome,
         <br />
@@ -31,7 +31,7 @@ const SideBar = ({ name }: SideBarProps) => {
               }
             >
               <span className="px-1">
-                <item.icon color="red" />
+                <item.icon color="white" />
               </span>
               {item.title}
             </div>
