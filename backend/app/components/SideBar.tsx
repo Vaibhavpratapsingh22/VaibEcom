@@ -12,7 +12,7 @@ const SideBar = ({ name }: SideBarProps) => {
   const pathname = usePathname();
   return (
     <div className="flex flex-col w-full h-full bg-red-200 p-5">
-      <div>
+      <div className="my-4">
         Welcome,
         <br />
         <span className="font-bold md:text-sm lg:text-xl">

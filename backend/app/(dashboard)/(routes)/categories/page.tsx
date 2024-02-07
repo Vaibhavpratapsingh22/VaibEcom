@@ -214,55 +214,57 @@ const Categories = () => {
           Save
         </button>
       </div>
-      <div className="overflow-x-auto rounded-lg border border-gray-200 mt-10">
-        <table className="min-w-full max-h-72 overflow-auto divide-y-2 divide-gray-200 bg-white text-sm">
-          <thead className="text-center">
-            <tr>
-              <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                Name
-              </th>
-              <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                Parent Category
-              </th>
-              <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 text-center">
-            {categories?.length > 0 ? (
-              categories?.map((product: any) => (
-                <tr key={product.id}>
-                  <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                    {product.name.toUpperCase()}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                    {product.parent?.name.toUpperCase() || "N/A"}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-2 justify-center flex text-gray-700">
-                    <button
-                      className="flex text-black font-bold mx-1 rounded"
-                      onClick={() => handleEditDelete("edit", product)}
-                    >
-                      <Edit />
-                    </button>
-
-                    <button
-                      className=" text-black flex justify-center items-center font-bold rounded"
-                      onClick={() => handleEditDelete("delete", product)}
-                    >
-                      <Trash2 />
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
+      <div className="flex sm:justify-start justify-center">
+        <div className="overflow-x-auto min-w-[50%] rounded-lg border border-gray-200 mt-10">
+          <table className="min-w-full max-h-72 overflow-auto divide-y-2 divide-gray-200 bg-white text-sm">
+            <thead className="text-center">
               <tr>
-                <td colSpan={3}> No Data Found</td>
+                <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-700">
+                  Name
+                </th>
+                <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-700">
+                  Parent Category
+                </th>
+                <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-700">
+                  Actions
+                </th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-200 text-center">
+              {categories?.length > 0 ? (
+                categories?.map((product: any) => (
+                  <tr key={product.id}>
+                    <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                      {product.name.toUpperCase()}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                      {product.parent?.name.toUpperCase() || "N/A"}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-2 justify-center flex text-gray-700">
+                      <button
+                        className="flex font-bold mx-1 px-2 rounded text-purple-500"
+                        onClick={() => handleEditDelete("edit", product)}
+                      >
+                        <Edit />
+                      </button>
+
+                      <button
+                        className=" text-red-500 flex px-2 justify-center items-center font-bold rounded"
+                        onClick={() => handleEditDelete("delete", product)}
+                      >
+                        <Trash2 />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={3}> No Data Found</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
       <ParentCategory
         onSave={handleSaveParentCategory}

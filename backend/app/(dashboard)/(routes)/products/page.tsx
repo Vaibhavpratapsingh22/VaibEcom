@@ -1,7 +1,7 @@
 "use client";
 import Modal from "@/app/components/DeleteModal";
 import axios from "axios";
-import { Delete, Edit } from "lucide-react";
+import { Delete, Edit, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -54,12 +54,15 @@ const Products = () => {
     setModal(!modal);
   };
   return (
-    <div>
-      <Link href="/products/new">
-        <button className="bg-blue-400 text-white font-bold py-2 px-4 rounded mb-4">
-          Add Product
-        </button>
-      </Link>
+    <>
+      <div className="flex justify-between">
+        <h1 className="text-2xl">Product Listing</h1>
+        <Link href="/products/new">
+          <button className="bg-purple-600 flex justify-end text-white font-bold py-2 px-4 rounded mb-4">
+            + Add Product
+          </button>
+        </Link>
+      </div>
       <div className="overflow-x-auto rounded-lg border border-gray-200">
         <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
           <thead className="text-left">
@@ -91,19 +94,19 @@ const Products = () => {
                 <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                   {product.description}
                 </td>
-                <td className="whitespace-nowrap px-4 py-2 flex text-gray-700">
+                <td className="whitespace-nowrap px-4 py-2 flex text-purple-700">
                   <button
-                    className="flex text-black font-bold mx-1 rounded"
+                    className="flex text-purple-700 font-bold mx-1 rounded"
                     onClick={() => handleEditDelete("edit", product)}
                   >
-                    <Edit /> Edit
+                    <Edit />
                   </button>
 
                   <button
-                    className=" text-black flex justify-center items-center font-bold rounded"
+                    className=" text-red-500 flex justify-center items-center font-bold rounded"
                     onClick={() => handleEditDelete("delete", product)}
                   >
-                    <Delete /> Delete
+                    <Trash2 />
                   </button>
                 </td>
               </tr>
@@ -112,7 +115,7 @@ const Products = () => {
         </table>
       </div>
       {modal && <Modal closeModal={closeModal} />}
-    </div>
+    </>
   );
 };
 
