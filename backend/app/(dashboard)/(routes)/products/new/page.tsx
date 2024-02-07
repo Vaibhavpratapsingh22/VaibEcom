@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import React, { useRef, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const NewProduct = () => {
   const formRef: React.MutableRefObject<HTMLFormElement | null> = useRef(null);
@@ -19,7 +19,7 @@ const NewProduct = () => {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = { name, price, description, uploadedImages };
+    const data = { name, price, description, uploadedImages, inputList };
     try {
       const response = await axios.post("/api/product", data);
       if (response.status === 201) {
@@ -71,7 +71,7 @@ const NewProduct = () => {
       setUploadedImage(imagesArray);
     }
   };
-  console.log(inputList);
+
   return (
     <>
       <h2>Add new product </h2>
@@ -126,6 +126,7 @@ const NewProduct = () => {
                       <input
                         type="text"
                         id="Color"
+                        required
                         name="property"
                         onChange={(e) => handleInputChange(e, i)}
                         className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
@@ -139,6 +140,7 @@ const NewProduct = () => {
                       <input
                         type="text"
                         id="Size"
+                        required
                         name="value"
                         onChange={(e) => handleInputChange(e, i)}
                         className="mt-1 w-full px-5 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"

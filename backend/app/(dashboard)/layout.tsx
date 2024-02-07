@@ -18,7 +18,7 @@ const Layout = ({ children }: LayoutProps) => {
       </DashboardLayout>
     );
   }
-  return redirect("/login");
+  // return redirect("/login");
 };
 
 export default Layout;

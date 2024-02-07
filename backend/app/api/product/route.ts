@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const { name, description, price, image } = body;
+    const { name, description, price, image, inputList } = body;
     const imagesURL = await Promise.all(
       image.map(async (imageURLs: string) => {
         const result = await cloudinary.uploader.upload(imageURLs);
@@ -41,6 +41,7 @@ export async function POST(req: NextRequest) {
         description: description,
         price: Number(price),
         image: imagesURL,
+        properties: inputList,
       },
     });
     return NextResponse.json(result, { status: 201 });

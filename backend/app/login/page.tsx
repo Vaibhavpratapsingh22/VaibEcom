@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 export default function Login() {
   const { data: session } = useSession();
   if (session) {
-    return redirect("/dashboard");
+    // return redirect("/dashboard");
   }
   return (
     <>
