@@ -91,7 +91,7 @@ const Products = () => {
                 <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                   {product.price}
                 </td>
-                <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                <td className="whitespace-wrap px-4 py-2 text-gray-700">
                   {product.description}
                 </td>
                 <td className="whitespace-nowrap px-4 py-2 flex text-purple-700">

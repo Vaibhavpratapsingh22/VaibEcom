@@ -223,6 +223,7 @@ const EditProduct = () => {
             multiple
             onChange={(ev) => handleUpload(ev)}
             id="ProductImage"
+            accept=".png, .jpg, .jpeg"
             name="Product Image"
             className="mt-1 w-full p-1 h-10 border-gray-400 border-2 bg-gray text-sm text-gray-700 shadow-sm"
           />
