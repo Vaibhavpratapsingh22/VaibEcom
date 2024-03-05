@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import { CartContext } from "./CartContext";
 
 const ProductCard = ({ data }: any) => {
+  const {addToCart} = useContext(CartContext);
+  const handleAddToCart = () => {
+    addToCart((prev: any) => [...prev, data?.id]);
+  }
+
   return (
     <div className="flex flex-wrap gap-10 my-2 justify-evenly">
       <a href="#" className="block rounded-lg p-4 shadow-sm shadow-indigo-100">
@@ -76,6 +82,12 @@ const ProductCard = ({ data }: any) => {
                 </div>
               </>
             ))}
+            <button
+              className="bg-slate-300 p-2 rounded hover:bg-slate-800 hover:text-white"
+              onClick={handleAddToCart}
+            >
+              Add to cart
+            </button>
           </div>
         </div>
       </a>

@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
+import { CartContext } from "./CartContext";
 
 const Header = () => {
+  const {cart} = useContext(CartContext);
   return (
     <>
       <header className="bg-white dark:bg-gray-900">
@@ -58,7 +60,7 @@ const Header = () => {
                       className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
                       href="/cart"
                     >
-                      Cart (0)
+                      Cart ({cart?.length})
                     </a>
                   </li>
                 </ul>

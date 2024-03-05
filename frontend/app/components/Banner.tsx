@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
+import { CartContext } from "./CartContext";
 
 const Banner = ({ data }: any) => {
-  console.log(data)
+  const { addToCart } = useContext(CartContext);
+  const handleAddToCart = () => {
+    addToCart((prev: any) => [...prev, data?.id]);
+  };
   return (
     <>
       <section className="overflow-hidden bg-gray-50 sm:grid sm:grid-cols-2 sm:items-center">
@@ -26,8 +30,8 @@ const Banner = ({ data }: any) => {
               </div>
               <div className="mt-4 md:mt-8">
                 <a
-                  href="#"
-                  className="inline-block rounded bg-emerald-600 px-12 py-3 sm:p-2 text-sm font-medium text-white transition hover:bg-emerald-700 focus:outline-none focus:ring focus:ring-yellow-400"
+                 onClick={handleAddToCart}
+                  className="inline-block cursor-pointer rounded bg-emerald-600 px-12 py-3 sm:p-2 text-sm font-medium text-white transition hover:bg-emerald-700 focus:outline-none focus:ring focus:ring-yellow-400"
                 >
                   Add to Cart
                 </a>
