@@ -9,7 +9,7 @@ const Header = () => {
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="md:flex md:items-center md:gap-12">
-              <a className="block text-teal-600 dark:text-teal-600" href="#">
+              <a className="block text-teal-600 dark:text-teal-600" href="/homepage">
                 <span className="sr-only">Home</span>
                 <svg
                   className="h-8"

@@ -4,7 +4,7 @@ import { CartContext } from "./CartContext";
 const Banner = ({ data }: any) => {
   const { addToCart } = useContext(CartContext);
   const handleAddToCart = () => {
-    addToCart((prev: any) => [...prev, data?.id]);
+    addToCart(data?.id);
   };
   return (
     <>

@@ -3,13 +3,13 @@ import { CartContext } from "./CartContext";
 
 const ProductCard = ({ data }: any) => {
   const {addToCart} = useContext(CartContext);
-  const handleAddToCart = () => {
-    addToCart((prev: any) => [...prev, data?.id]);
+  const handleAddToCart = (id:any) => {
+    addToCart(id);
   }
 
   return (
     <div className="flex flex-wrap gap-10 my-2 justify-evenly">
-      <a href="#" className="block rounded-lg p-4 shadow-sm shadow-indigo-100">
+      <a className="block rounded-lg p-4 shadow-sm shadow-indigo-100">
         <img
           alt=""
           src={data?.image[0]}
@@ -84,7 +84,7 @@ const ProductCard = ({ data }: any) => {
             ))}
             <button
               className="bg-slate-300 p-2 rounded hover:bg-slate-800 hover:text-white"
-              onClick={handleAddToCart}
+              onClick={()=>handleAddToCart(data?.id)}
             >
               Add to cart
             </button>

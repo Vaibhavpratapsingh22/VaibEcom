@@ -1,29 +1,31 @@
 "use client";
-import { createContext, use, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const CartContext = createContext<any>({});
 
 export function CartProvider({ children }: any) {
-  const ls = typeof window !== "undefined" ? window.localStorage : null;
   const [cart, setCart] = useState<any>([]);
 
-useEffect(() => {
-    if (cart) {
-        ls?.setItem("cart", JSON.stringify(cart));
+  useEffect(() => {
+    const ls = window.localStorage;
+    if (ls && ls.getItem("cart")) {
+      setCart(JSON.parse(ls.getItem("cart")!));
     }
-}, [cart]);
+  }, []); // Run once on component mount to initialize cart from localStorage
 
-useEffect(() => {
-    if (ls && ls?.getItem("cart")) {
-        setCart(JSON.parse(ls?.getItem("cart")!));
+  useEffect(() => {
+    const ls = window.localStorage;
+    if (ls && cart.length > 0) {
+      ls.setItem("cart", JSON.stringify(cart));
     }
-}, []);
+  }, [cart]); // Update localStorage whenever cart changes
 
-function addToCart(id: string) {
+  function addToCart(id: any) {
     setCart((prev: any) => [...prev, id]);
-}
+  }
+
   return (
-    <CartContext.Provider value={{ cart, setCart, addToCart }}>
+    <CartContext.Provider value={{ cart, addToCart }}>
       {children}
     </CartContext.Provider>
   );
